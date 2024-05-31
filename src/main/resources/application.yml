@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: SyncBook
+  docker:
+    compose:
+      enabled: false
+      file: docker-compose.yml
