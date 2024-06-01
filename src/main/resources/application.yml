@@ -3,5 +3,5 @@ spring:
     name: SyncBook
   docker:
     compose:
-      enabled: false
+      enabled: true
       file: docker-compose.yml
