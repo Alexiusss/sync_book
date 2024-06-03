@@ -1,3 +1,6 @@
+server:
+  port: 9292
+
 spring:
   application:
     name: SyncBook
@@ -5,3 +8,10 @@ spring:
     compose:
       enabled: true
       file: docker-compose.yml
+  data:
+    rest:
+      base-path: /api
+  datasource:
+    url: jdbc:postgresql:5431//localhost/${POSTGRES_DB}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
