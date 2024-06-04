@@ -20,3 +20,4 @@ spring:
 minio.root.user: ${MINIO_ROOT_USER}
 minio.root.password: ${MINIO_ROOT_PASSWORD}
 minio.endpoint: ${MINIO_ENDPOINT}
+minio.bucket.name: ${MINIO_BUCKET_NAME}
