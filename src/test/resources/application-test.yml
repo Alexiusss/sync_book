@@ -1,0 +1,15 @@
+server:
+  port: 9292
+
+spring:
+  application:
+    name: SyncBook
+  docker:
+    compose:
+      enabled: true
+      file: docker-compose.yml
+
+minio.root.user: ${MINIO_ROOT_USER}
+minio.root.password: ${MINIO_ROOT_PASSWORD}
+minio.endpoint: ${MINIO_ENDPOINT}
+minio.bucket.name: ${MINIO_TEST_BUCKET_NAME}
