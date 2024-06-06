@@ -3,9 +3,13 @@ package com.example.sync_book.web;
 import com.example.sync_book.service.MinioService;
 import io.minio.MinioClient;
 import io.minio.errors.*;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -28,14 +32,17 @@ public class MinioController {
     @Autowired
     MinioService minioService;
 
-    @PostMapping
+    @Operation(summary = "Upload the file")
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<?> upload(@RequestParam("file") MultipartFile file) {
+    public ResponseEntity<?> upload(@Parameter(description = "File to upload") @RequestParam("file")
+                                    @Schema(type = "string", format = "binary") MultipartFile file) {
         minioService.save(file);
         return ResponseEntity.ok(file.getOriginalFilename());
     }
 
     @GetMapping
+    @Operation(summary = "Download the file by its name")
     public ResponseEntity<?> download(@RequestParam String fileName) throws ServerException, InsufficientDataException,
             ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException,
             InvalidResponseException, XmlParserException, InternalException {
