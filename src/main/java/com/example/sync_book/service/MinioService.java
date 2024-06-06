@@ -17,6 +17,10 @@ import java.security.NoSuchAlgorithmException;
 
 import static com.example.sync_book.util.MinioUtil.getBucketName;
 
+/**
+ * Service class for managing audio, image and text files in MinIO.
+ * This service provides functionalities to save and retrieve files from a MinIO server.
+ */
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -24,6 +28,12 @@ public class MinioService {
 
     private final MinioClient minioClient;
 
+    /**
+     * Saves a file to the MinIO server.
+     *
+     * @param file the file to be saved.
+     * @throws RuntimeException if an error occurs during file upload.
+     */
     public void save(MultipartFile file) {
         try (BufferedInputStream inputStream = new BufferedInputStream(file.getInputStream())) {
             minioClient.putObject(PutObjectArgs.builder()
@@ -38,6 +48,13 @@ public class MinioService {
         }
     }
 
+    /**
+     * Retrieves a file from the MinIO server.
+     *
+     * @param fileName the name of the file to be retrieved.
+     * @return the byte content of the file.
+     * @throws RuntimeException if an error occurs during file download.
+     */
     public byte[] get(String fileName) {
         try (InputStream stream = minioClient.getObject(GetObjectArgs.builder()
                 .bucket(getBucketName())
