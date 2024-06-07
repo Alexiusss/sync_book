@@ -10,7 +10,8 @@ import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
-import static com.example.sync_book.util.MinioUtil.*;
+import static com.example.sync_book.util.MinioUtil.isBucketExists;
+import static com.example.sync_book.util.MinioUtil.makeBucket;
 
 @Configuration
 public class MinioConfig {
@@ -21,6 +22,8 @@ public class MinioConfig {
     String password;
     @Value("${minio.endpoint}")
     String endpoint;
+    @Value("${minio.bucket.name}")
+    String bucketName;
 
     @Bean
     MinioClient minioClient() throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
@@ -29,8 +32,8 @@ public class MinioConfig {
                 .credentials(login, password)
                 .build();
 
-        if (!isBucketExists(minioClient, getBucketName())) {
-            makeBucket(minioClient, getBucketName());
+        if (!isBucketExists(minioClient, bucketName)) {
+            makeBucket(minioClient, bucketName);
         }
 
         return minioClient;

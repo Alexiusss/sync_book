@@ -8,6 +8,9 @@ spring:
     compose:
       enabled: true
       file: docker-compose.yml
+      stop:
+        command: stop
+        timeout: 10
   data:
     rest:
       base-path: /api

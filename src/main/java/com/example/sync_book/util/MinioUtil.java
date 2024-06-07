@@ -4,25 +4,14 @@ import io.minio.BucketExistsArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
 import io.minio.errors.*;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
+import lombok.experimental.UtilityClass;
 
 import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
-@Component
+@UtilityClass
 public class MinioUtil {
-
-    private static String BUCKET_NAME;
-    @Value("${minio.bucket.name}")
-    public void setBucketName(String name) {
-        BUCKET_NAME = name;
-    }
-
-    public static String getBucketName() {
-        return BUCKET_NAME;
-    }
 
     public static boolean isBucketExists(MinioClient minioClient, String bucketName) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         return minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build());
