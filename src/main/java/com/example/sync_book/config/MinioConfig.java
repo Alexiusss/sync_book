@@ -26,7 +26,10 @@ public class MinioConfig {
     String bucketName;
 
     @Bean
-    MinioClient minioClient() throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+    MinioClient minioClient()
+            throws ServerException, InsufficientDataException, ErrorResponseException,
+            IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException,
+            XmlParserException, InternalException {
         MinioClient minioClient = MinioClient.builder()
                 .endpoint(endpoint)
                 .credentials(login, password)

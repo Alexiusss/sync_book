@@ -18,6 +18,11 @@ spring:
     url: jdbc:postgresql:5431//localhost/${POSTGRES_DB}
     username: ${POSTGRES_USER}
     password: ${POSTGRES_PASSWORD}
+logging:
+  level:
+    root: WARN
+    com.example.com.example.sync_book: DEBUG
+    org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver: DEBUG
 
 
 minio.root.user: ${MINIO_ROOT_USER}

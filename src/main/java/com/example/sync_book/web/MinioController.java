@@ -1,6 +1,7 @@
 package com.example.sync_book.web;
 
 import com.example.sync_book.service.MinioService;
+import io.minio.errors.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -10,6 +11,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -34,7 +39,10 @@ public class MinioController {
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<String> upload(@Parameter(description = "File to upload") @RequestParam("file")
-                                    @Schema(type = "string", format = "binary") MultipartFile file) {
+                                         @Schema(type = "string", format = "binary") MultipartFile file)
+            throws ServerException, InsufficientDataException, ErrorResponseException,
+            IOException, NoSuchAlgorithmException, InvalidKeyException,
+            InvalidResponseException, XmlParserException, InternalException {
         minioService.save(file);
         return ResponseEntity.ok(file.getOriginalFilename());
     }
@@ -47,7 +55,10 @@ public class MinioController {
      */
     @GetMapping
     @Operation(summary = "Download the file by its name")
-    public ResponseEntity<byte[]> download(@RequestParam String fileName) {
+    public ResponseEntity<byte[]> download(@RequestParam String fileName)
+            throws ServerException, InsufficientDataException, ErrorResponseException,
+            IOException, NoSuchAlgorithmException, InvalidKeyException,
+            InvalidResponseException, XmlParserException, InternalException {
         byte[] content = minioService.get(fileName);
         return ResponseEntity.ok()
                 .header("Content-Disposition", "attachment; filename=\"" + fileName + "\"")

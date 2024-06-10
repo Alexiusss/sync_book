@@ -3,7 +3,7 @@ package com.example.sync_book.service;
 import io.minio.GetObjectArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
-import io.minio.errors.MinioException;
+import io.minio.errors.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,9 +34,21 @@ public class MinioService {
      * Saves a file to the MinIO server.
      *
      * @param file the file to be saved.
-     * @throws RuntimeException if an error occurs during file upload.
+     * @throws ServerException thrown to indicate that S3 service returning HTTP server error
+     * @throws ErrorResponseException thrown to indicate S3 service returned an error response.
+     * @throws InsufficientDataException thrown to indicate not enough data available in InputStream.
+     * @throws InternalException thrown to indicate internal library error.
+     * @throws InvalidKeyException thrown to indicate missing of HMAC SHA-256 library.
+     * @throws InvalidResponseException thrown to indicate S3 service returned invalid or no error
+     *     response.
+     * @throws IOException thrown to indicate I/O error on S3 operation.
+     * @throws NoSuchAlgorithmException thrown to indicate missing of MD5 or SHA-256 digest library.
+     * @throws XmlParserException thrown to indicate XML parsing error.
      */
-    public void save(MultipartFile file) {
+    public void save(MultipartFile file)
+            throws ServerException, InsufficientDataException, ErrorResponseException,
+            IOException, NoSuchAlgorithmException, InvalidKeyException,
+            InvalidResponseException, XmlParserException, InternalException {
         try (BufferedInputStream inputStream = new BufferedInputStream(file.getInputStream())) {
             minioClient.putObject(PutObjectArgs.builder()
                     .bucket(bucketName)
@@ -44,9 +56,6 @@ public class MinioService {
                     .stream(inputStream, file.getSize(), -1)
                     .build());
             log.info("File '{}' uploaded successfully.", file.getOriginalFilename());
-        } catch (IOException | MinioException | NoSuchAlgorithmException | InvalidKeyException e) {
-            log.error("Error occurred while uploading file '{}': {}", file.getOriginalFilename(), e.getMessage());
-            throw new RuntimeException("Failed to upload file. Please try again.", e);
         }
     }
 
@@ -55,18 +64,27 @@ public class MinioService {
      *
      * @param fileName the name of the file to be retrieved.
      * @return the byte content of the file.
-     * @throws RuntimeException if an error occurs during file download.
+     * @throws ServerException thrown to indicate that S3 service returning HTTP server error
+     * @throws ErrorResponseException thrown to indicate S3 service returned an error response.
+     * @throws InsufficientDataException thrown to indicate not enough data available in InputStream.
+     * @throws InternalException thrown to indicate internal library error.
+     * @throws InvalidKeyException thrown to indicate missing of HMAC SHA-256 library.
+     * @throws InvalidResponseException thrown to indicate S3 service returned invalid or no error
+     *     response.
+     * @throws IOException thrown to indicate I/O error on S3 operation.
+     * @throws NoSuchAlgorithmException thrown to indicate missing of MD5 or SHA-256 digest library.
+     * @throws XmlParserException thrown to indicate XML parsing error.
      */
-    public byte[] get(String fileName) {
+    public byte[] get(String fileName)
+            throws ServerException, InsufficientDataException, ErrorResponseException,
+            IOException, NoSuchAlgorithmException, InvalidKeyException,
+            InvalidResponseException, XmlParserException, InternalException {
         try (InputStream stream = minioClient.getObject(GetObjectArgs.builder()
                 .bucket(bucketName)
                 .object(fileName)
                 .build())) {
             log.info("File '{}' downloaded successfully.", fileName);
             return stream.readAllBytes();
-        } catch (IOException | MinioException | InvalidKeyException | NoSuchAlgorithmException e) {
-            log.error("Error occurred while downloading file '{}': {}", fileName, e.getMessage());
-            throw new RuntimeException("Failed to download file. Please try again.", e);
         }
     }
 }
