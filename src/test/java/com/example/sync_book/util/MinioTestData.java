@@ -10,7 +10,7 @@ import java.time.Duration;
 
 @Slf4j
 public class MinioTestData {
-        private static final String MINIO_IMAGE = "minio/minio";
+    private static final String MINIO_IMAGE = "minio/minio";
     public static final String MINIO_USERNAME = "admin";
     public static final String MINIO_PASSWORD = "password";
     public static final int MINIO_PORT = 9000;

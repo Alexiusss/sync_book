@@ -11,8 +11,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
+import java.net.URI;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
@@ -37,14 +39,16 @@ public class MinioController {
      */
     @Operation(summary = "Upload the file")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<String> upload(@Parameter(description = "File to upload") @RequestParam("file")
-                                         @Schema(type = "string", format = "binary") MultipartFile file)
+                                    @Schema(type = "string", format = "binary") MultipartFile file)
             throws ServerException, InsufficientDataException, ErrorResponseException,
             IOException, NoSuchAlgorithmException, InvalidKeyException,
             InvalidResponseException, XmlParserException, InternalException {
         minioService.save(file);
-        return ResponseEntity.ok(file.getOriginalFilename());
+        URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path(REST_URL + "/{fileName}")
+                .buildAndExpand(file.getOriginalFilename()).toUri();
+        return ResponseEntity.created(uriOfNewResource).body(file.getOriginalFilename());
     }
 
     /**
@@ -53,9 +57,9 @@ public class MinioController {
      * @param fileName the name of the file to download.
      * @return the byte content of the file.
      */
-    @GetMapping
+    @GetMapping("/{fileName}")
     @Operation(summary = "Download the file by its name")
-    public ResponseEntity<byte[]> download(@RequestParam String fileName)
+    public ResponseEntity<byte[]> download(@PathVariable String fileName)
             throws ServerException, InsufficientDataException, ErrorResponseException,
             IOException, NoSuchAlgorithmException, InvalidKeyException,
             InvalidResponseException, XmlParserException, InternalException {
