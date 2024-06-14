@@ -4,7 +4,11 @@ import com.example.sync_book.HasId;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.util.ProxyUtils;
+
+import java.time.LocalDateTime;
 
 @MappedSuperclass
 @Access(AccessType.FIELD)
@@ -13,12 +17,22 @@ import org.springframework.data.util.ProxyUtils;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
+@ToString
 public class BaseEntity implements HasId {
-
     @Id
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @CreationTimestamp
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
+
+    @UpdateTimestamp
+    private LocalDateTime modifiedAt;
+
+    @Version
+    private int version;
 
     @Override
     public boolean equals(Object o) {
@@ -35,11 +49,5 @@ public class BaseEntity implements HasId {
     @Override
     public int hashCode() {
         return id == null ? 0 : id;
-    }
-
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + ":" + id;
     }
 }
