@@ -1,4 +1,4 @@
-package com.example.sync_book;
+package com.example.sync_book.web;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.springframework.beans.factory.annotation.Autowired;

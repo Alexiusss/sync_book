@@ -4,7 +4,10 @@ server:
 spring:
   application:
     name: SyncBook
-
+  datasource:
+    url: jdbc:tc:postgresql:12.10:///test_database
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
 
 minio:
   root:

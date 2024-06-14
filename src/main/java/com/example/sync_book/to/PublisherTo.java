@@ -1,5 +1,6 @@
 package com.example.sync_book.to;
 
+import com.example.sync_book.validation.NoHtml;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
 
@@ -7,6 +8,7 @@ import lombok.Value;
 @EqualsAndHashCode(callSuper = true)
 public class PublisherTo extends NamedTo{
     Integer foundationYear;
+    @NoHtml
     String city;
 
     public PublisherTo(Integer id, String name, Integer foundationYear, String city) {

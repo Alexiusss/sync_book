@@ -1,6 +1,5 @@
-package com.example.sync_book;
+package com.example.sync_book.web;
 
-import com.example.sync_book.web.MinioController;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
@@ -9,7 +8,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import static com.example.sync_book.util.MinioTestData.NOT_FOUND_MESSAGE;
 import static com.example.sync_book.util.MinioTestData.getNewFile;
 import static org.hamcrest.Matchers.equalTo;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
