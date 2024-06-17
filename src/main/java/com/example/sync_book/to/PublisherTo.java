@@ -1,13 +1,24 @@
 package com.example.sync_book.to;
 
 import com.example.sync_book.validation.NoHtml;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
 
 @Value
 @EqualsAndHashCode(callSuper = true)
 public class PublisherTo extends NamedTo{
+
+    @NotBlank
+    @Min(1584)
+    @Max(2024)
     Integer foundationYear;
+
+    @NotBlank
+    @Size(min = 2, max = 128)
     @NoHtml
     String city;
 
@@ -19,6 +30,6 @@ public class PublisherTo extends NamedTo{
 
     @Override
     public String toString() {
-        return "PublisherTo:" + id + '[' + city + ' ' + foundationYear + ']';
+        return "PublisherTo:" + id + '['  + name + ' ' + city + ' ' + foundationYear + ']';
     }
 }
