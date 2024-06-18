@@ -21,7 +21,8 @@ import java.time.LocalDateTime;
 public class BaseEntity implements HasId {
     @Id
     @Schema(accessMode = Schema.AccessMode.READ_ONLY)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seqGen")
+    @SequenceGenerator(name = "seqGen", sequenceName = "global_sequence", allocationSize = 1)
     private Integer id;
 
     @CreationTimestamp

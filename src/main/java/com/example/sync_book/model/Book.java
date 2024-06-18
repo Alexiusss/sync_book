@@ -1,18 +1,20 @@
-package com.example.sync_book.to;
+package com.example.sync_book.model;
 
-import com.example.sync_book.model.FileType;
-import com.example.sync_book.model.Genre;
 import com.example.sync_book.validation.NoHtml;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
-@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString
-public class BookTo extends NamedTo{
+public class Book extends NamedEntity{
 
     @NotBlank
     @Size(min = 2, max = 128)
@@ -28,6 +30,16 @@ public class BookTo extends NamedTo{
     @Min(1584)
     @Max(2024)
     Integer publicationYear;
+
+    @NotBlank
+    @Size(min = 2, max = 128)
+    @NoHtml
+    String fileName;
+
+    @NotBlank
+    @Size(min = 2, max = 8)
+    @NoHtml
+    String fileExtension;
 
     @NotBlank
     @Size(min = 2, max = 128)
@@ -57,4 +69,8 @@ public class BookTo extends NamedTo{
 
     @NotBlank
     Genre genre;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "publisher_id", nullable = false)
+    Publisher publisher;
 }
