@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 
 @MappedSuperclass
 @Access(AccessType.FIELD)
-@Entity
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)

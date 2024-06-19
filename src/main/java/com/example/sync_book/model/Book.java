@@ -8,12 +8,14 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.*;
 
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString
+@Table(name = "books")
 public class Book extends NamedEntity{
 
     @NotBlank
@@ -52,6 +54,7 @@ public class Book extends NamedEntity{
     String imageUrl;
 
     @NotBlank
+    @Enumerated(EnumType.STRING)
     FileType fileType;
 
     @NotBlank
@@ -68,6 +71,7 @@ public class Book extends NamedEntity{
     String translator;
 
     @NotBlank
+    @Enumerated(EnumType.STRING)
     Genre genre;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
