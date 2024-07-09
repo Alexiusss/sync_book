@@ -3,15 +3,16 @@ package com.example.sync_book.to;
 import com.example.sync_book.model.FileType;
 import com.example.sync_book.model.Genre;
 import com.example.sync_book.validation.NoHtml;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-@Builder
+@Data
+@SuperBuilder
 @EqualsAndHashCode(callSuper = true)
 @ToString
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class BookTo extends NamedTo{
 
     @NotBlank
@@ -24,7 +25,7 @@ public class BookTo extends NamedTo{
     @NoHtml
     String description;
 
-    @NotBlank
+    @NotNull
     @Min(1584)
     @Max(2024)
     Integer publicationYear;
@@ -39,7 +40,7 @@ public class BookTo extends NamedTo{
     @NoHtml
     String imageUrl;
 
-    @NotBlank
+    @NotNull
     FileType fileType;
 
     @NotBlank
@@ -55,6 +56,20 @@ public class BookTo extends NamedTo{
     @NoHtml
     String translator;
 
-    @NotBlank
+    @NotNull
     Genre genre;
+
+    public BookTo(Integer id, String name, String author, String description, Integer publicationYear, String sourceUrl, String imageUrl, FileType fileType, String language, String narrator, String translator, Genre genre) {
+        super(id, name);
+        this.author = author;
+        this.description = description;
+        this.publicationYear = publicationYear;
+        this.sourceUrl = sourceUrl;
+        this.imageUrl = imageUrl;
+        this.fileType = fileType;
+        this.language = language;
+        this.narrator = narrator;
+        this.translator = translator;
+        this.genre = genre;
+    }
 }

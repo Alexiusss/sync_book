@@ -2,11 +2,9 @@ package com.example.sync_book.model;
 
 import com.example.sync_book.validation.NoHtml;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @NoArgsConstructor
@@ -15,6 +13,7 @@ import lombok.*;
 @Setter
 @EqualsAndHashCode(callSuper = true)
 @ToString
+@SuperBuilder
 @Table(name = "books")
 public class Book extends NamedEntity{
 
@@ -28,7 +27,7 @@ public class Book extends NamedEntity{
     @NoHtml
     String description;
 
-    @NotBlank
+    @NotNull
     @Min(1584)
     @Max(2024)
     Integer publicationYear;
@@ -53,7 +52,7 @@ public class Book extends NamedEntity{
     @NoHtml
     String imageUrl;
 
-    @NotBlank
+    @NotNull
     @Enumerated(EnumType.STRING)
     FileType fileType;
 
@@ -70,7 +69,7 @@ public class Book extends NamedEntity{
     @NoHtml
     String translator;
 
-    @NotBlank
+    @NotNull
     @Enumerated(EnumType.STRING)
     Genre genre;
 
