@@ -9,6 +9,7 @@ import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.transaction.annotation.Transactional;
 import org.testcontainers.containers.MinIOContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -22,6 +23,7 @@ import static com.example.sync_book.util.MinioTestData.setMinioTestProperties;
 @ActiveProfiles("test")
 @Testcontainers
 @Sql(value = {"/test-data.sql"})
+@Transactional
 class AbstractControllerTest {
 
     @Autowired

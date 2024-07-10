@@ -22,6 +22,7 @@ import static com.example.sync_book.util.ValidationUtil.checkNew;
 @Service
 @AllArgsConstructor
 @Slf4j
+@Transactional(readOnly = true)
 public class PublisherService {
 
     private final PublisherRepository repository;

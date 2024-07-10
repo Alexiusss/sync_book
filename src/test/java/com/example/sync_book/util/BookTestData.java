@@ -17,9 +17,9 @@ public class BookTestData {
     public static final Integer BOOK1_ID = 100004;
     public static final Integer BOOK2_ID = 100005;
     public static final Integer BOOK3_ID = 100006;
-    public static final BookTo BOOK1 = new BookTo(BOOK1_ID, "Book 1", "Book 1 author", "Book 1 description", 2021, "http://book1source.com", "http://book1image.com", FileType.TEXT, "ru", null, null, Genre.DETECTIVE);
-    public static final BookTo BOOK2 = new BookTo(BOOK2_ID, "Book 2", "Book 2 author", "Book 2 description", 2022, "http://book2source.com", "http://book2image.com", FileType.AUDIO, "en", null, null, Genre.HISTORY);
-    public static final BookTo BOOK3 = new BookTo(BOOK3_ID, "Book 3", "Book 3 author", "Book 3 description", 2023, "http://book3source.com", "http://book3image.com", FileType.TEXT, "ru", null, null, Genre.FANTASY);
+    public static final BookTo BOOK1 = new BookTo(BOOK1_ID, "Book 1", "Book 1 author", "Book 1 description", 2021, "http://book1source.com/book1.fb2", "http://book1image.com", FileType.TEXT, "ru", null, null, Genre.DETECTIVE);
+    public static final BookTo BOOK2 = new BookTo(BOOK2_ID, "Book 2", "Book 2 author", "Book 2 description", 2022, "http://book2source.com/book2.mp2", "http://book2image.com", FileType.AUDIO, "en", null, null, Genre.HISTORY);
+    public static final BookTo BOOK3 = new BookTo(BOOK3_ID, "Book 3", "Book 3 author", "Book 3 description", 2023, "http://book3source.com/book3.epub", "http://book3image.com", FileType.TEXT, "ru", null, null, Genre.FANTASY);
     public static final List<BookTo> BOOK_TO_LIST = List.of(BOOK1, BOOK2, BOOK3);
 
     public static BookTo getNew() {
@@ -28,8 +28,8 @@ public class BookTestData {
                 .author("New author")
                 .description("New book description")
                 .publicationYear(2024)
-                .sourceUrl("http://source.com/NewBookName")
-                .imageUrl("http://source.com/NewBookImageUrl")
+                .sourceUrl("http://source.com/NewBookName.fb2")
+                .imageUrl("http://source.com/NewBookImageUrl.png")
                 .fileType(FileType.TEXT)
                 .language("en")
                 .genre(Genre.GUIDE)
