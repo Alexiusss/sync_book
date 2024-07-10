@@ -21,7 +21,7 @@ public class BookTo extends NamedTo{
     String author;
 
     @NotBlank
-    @Size(min = 20, max = 1024)
+    @Size(min = 15, max = 1024)
     @NoHtml
     String description;
 
