@@ -13,8 +13,6 @@ CREATE TABLE IF NOT EXISTS publishers
 
 CREATE UNIQUE INDEX publisher_name_idx ON publishers (name);
 
-CREATE TYPE file_type AS ENUM ('AUDIO', 'TEXT', 'IMAGE');
-
 CREATE TABLE IF NOT EXISTS books
 (
     id               INT PRIMARY KEY NOT NULL,
@@ -26,8 +24,8 @@ CREATE TABLE IF NOT EXISTS books
     description      VARCHAR(2047)   NOT NULL,
     publication_year INT             NOT NULL,
     file_name        VARCHAR(255)    NOT NULL,
-    file_extension   VARCHAR(17)     NOT NULL,
-    file_type        file_type       NOT NULL,
+    file_extension   VARCHAR(15)     NOT NULL,
+    file_type        VARCHAR(15)     NOT NULL,
     source_url       VARCHAR(255)    NOT NULL,
     image_url        VARCHAR(255),
     language         VARCHAR(33)     NOT NULL,
@@ -38,4 +36,4 @@ CREATE TABLE IF NOT EXISTS books
     foreign key (publisher_id) REFERENCES publishers (id) ON DELETE CASCADE
 );
 
-CREATE UNIQUE INDEX books_nap_idx ON books (name, author, publication_year);
+CREATE UNIQUE INDEX books_nap_idx ON books (name, author, publisher_id, file_type);
