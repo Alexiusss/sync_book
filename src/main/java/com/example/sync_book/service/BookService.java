@@ -1,8 +1,11 @@
 package com.example.sync_book.service;
 
 import com.example.sync_book.model.Book;
+import com.example.sync_book.model.Publisher;
 import com.example.sync_book.repository.BookRepository;
+import com.example.sync_book.repository.PublisherRepository;
 import com.example.sync_book.to.BookTo;
+import com.example.sync_book.to.PublisherTo;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +31,9 @@ public class BookService {
 
     @Autowired
     BookRepository repository;
+
+    @Autowired
+    PublisherRepository publisherRepository;
 
     /**
      * Retrieves a book by its ID.
@@ -118,6 +124,7 @@ public class BookService {
                 .narrator(book.getNarrator())
                 .translator(book.getTranslator())
                 .genre(book.getGenre())
+                .publisherId(book.getPublisher().id())
                 .build();
     }
 
@@ -128,6 +135,7 @@ public class BookService {
      * @return the corresponding Book entity
      */
     private Book convertFromDto(BookTo bookTo) {
+        Publisher publisher = publisherRepository.getExisted(bookTo.getPublisherId());
         return Book.builder()
                 .name(bookTo.getName())
                 .author(bookTo.getAuthor())
@@ -142,6 +150,7 @@ public class BookService {
                 .narrator(bookTo.getNarrator())
                 .translator(bookTo.getTranslator())
                 .genre(bookTo.getGenre())
+                .publisher(publisher)
                 .build();
     }
 

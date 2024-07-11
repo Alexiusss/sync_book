@@ -59,7 +59,10 @@ public class BookTo extends NamedTo{
     @NotNull
     Genre genre;
 
-    public BookTo(Integer id, String name, String author, String description, Integer publicationYear, String sourceUrl, String imageUrl, FileType fileType, String language, String narrator, String translator, Genre genre) {
+    @NotNull
+    Integer publisherId;
+
+    public BookTo(Integer id, String name, String author, String description, Integer publicationYear, String sourceUrl, String imageUrl, FileType fileType, String language, String narrator, String translator, Genre genre, Integer publisherId) {
         super(id, name);
         this.author = author;
         this.description = description;
@@ -71,5 +74,6 @@ public class BookTo extends NamedTo{
         this.narrator = narrator;
         this.translator = translator;
         this.genre = genre;
+        this.publisherId = publisherId;
     }
 }
