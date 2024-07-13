@@ -1,14 +1,18 @@
 package com.example.sync_book.web;
 
 import com.example.sync_book.error.NotFoundException;
+import com.example.sync_book.model.Genre;
 import com.example.sync_book.service.BookService;
 import com.example.sync_book.to.BookTo;
 import com.example.sync_book.util.JsonUtil;
+import jakarta.persistence.GeneratedValue;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.List;
 
 import static com.example.sync_book.util.BookTestData.*;
 import static com.example.sync_book.util.JsonUtil.writeValue;
@@ -123,6 +127,42 @@ class BookControllerTest extends AbstractControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(BOOK_TO_MATCHER.contentJson(BOOK_TO_LIST));
+    }
+
+    @Test
+    void gertAllByAuthorName() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + "/")
+                .param("authorName", AUTHOR_NAME))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(BOOK_TO_MATCHER.contentJson(List.of(BOOK1)));
+    }
+
+    @Test
+    void gertAllByGenre() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + "/")
+                .param("genre", Genre.FANTASY.getLocalizedName()))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(BOOK_TO_MATCHER.contentJson(List.of(BOOK3)));
+    }
+
+    @Test
+    void gertAllByPublicationYear() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + "/")
+                .param("publicationYear", String.valueOf(PUBLICATION_YEAR)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(BOOK_TO_MATCHER.contentJson(List.of(BOOK1)));
+    }
+
+    @Test
+    void gertAllByName() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + "/")
+                .param("name", BOOK_NAME))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(BOOK_TO_MATCHER.contentJson(List.of(BOOK1)));
     }
 
     @Test

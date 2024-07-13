@@ -6,6 +6,7 @@ import com.example.sync_book.validation.NoHtml;
 import jakarta.validation.constraints.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.validator.constraints.URL;
 
 @Data
 @SuperBuilder
@@ -33,11 +34,13 @@ public class BookTo extends NamedTo{
     @NotBlank
     @Size(min = 2, max = 128)
     @NoHtml
+    @URL
     String sourceUrl;
 
     @NotBlank
     @Size(min = 2, max = 128)
     @NoHtml
+    @URL
     String imageUrl;
 
     @NotNull
