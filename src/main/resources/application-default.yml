@@ -23,10 +23,13 @@ spring:
       ddl-auto: none
     show-sql: true
     open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
 logging:
   level:
     root: WARN
-    com.example.com.example.sync_book: DEBUG
+    com.example.sync_book: DEBUG
     org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver: DEBUG
 
 

@@ -5,7 +5,6 @@ import com.example.sync_book.model.Genre;
 import com.example.sync_book.service.BookService;
 import com.example.sync_book.to.BookTo;
 import com.example.sync_book.util.JsonUtil;
-import jakarta.persistence.GeneratedValue;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -131,8 +130,8 @@ class BookControllerTest extends AbstractControllerTest {
 
     @Test
     void gertAllByAuthorName() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + "/")
-                .param("authorName", AUTHOR_NAME))
+        perform(MockMvcRequestBuilders.get(REST_URL)
+                .param("author", AUTHOR_NAME))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(BOOK_TO_MATCHER.contentJson(List.of(BOOK1)));
@@ -140,8 +139,8 @@ class BookControllerTest extends AbstractControllerTest {
 
     @Test
     void gertAllByGenre() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + "/")
-                .param("genre", Genre.FANTASY.getLocalizedName()))
+        perform(MockMvcRequestBuilders.get(REST_URL)
+                .param("genre", Genre.FANTASY.toString()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(BOOK_TO_MATCHER.contentJson(List.of(BOOK3)));
@@ -149,7 +148,7 @@ class BookControllerTest extends AbstractControllerTest {
 
     @Test
     void gertAllByPublicationYear() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + "/")
+        perform(MockMvcRequestBuilders.get(REST_URL)
                 .param("publicationYear", String.valueOf(PUBLICATION_YEAR)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
@@ -158,7 +157,7 @@ class BookControllerTest extends AbstractControllerTest {
 
     @Test
     void gertAllByName() throws Exception {
-        perform(MockMvcRequestBuilders.get(REST_URL + "/")
+        perform(MockMvcRequestBuilders.get(REST_URL)
                 .param("name", BOOK_NAME))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))

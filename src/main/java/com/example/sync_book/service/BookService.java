@@ -5,7 +5,6 @@ import com.example.sync_book.model.Publisher;
 import com.example.sync_book.repository.BookRepository;
 import com.example.sync_book.repository.PublisherRepository;
 import com.example.sync_book.to.BookTo;
-import com.example.sync_book.to.PublisherTo;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,7 @@ import static com.example.sync_book.util.ValidationUtil.checkNew;
 public class BookService {
 
     @Autowired
-    BookRepository repository;
+    BookRepository bookRepository;
 
     @Autowired
     PublisherRepository publisherRepository;
@@ -43,7 +42,7 @@ public class BookService {
      */
     public BookTo get(int id) {
         log.info("get book {}", id);
-        Book book = repository.getExisted(id);
+        Book book = bookRepository.getExisted(id);
         return convertToDto(book);
     }
 
@@ -52,9 +51,9 @@ public class BookService {
      *
      * @return a list of BookTo DTOs representing all books
      */
-    public List<BookTo> getAll() {
+    public List<BookTo> getAll(String author, String name, String genre, Integer publicationYear) {
         log.info("get all books");
-        return repository.findAll().stream()
+        return bookRepository.findAll(author, name, genre, publicationYear).stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
@@ -69,7 +68,7 @@ public class BookService {
     public BookTo create(BookTo book) {
         Assert.notNull(book, "book must not be null");
         checkNew(book);
-        Book saved = repository.save(convertFromDto(book));
+        Book saved = bookRepository.save(convertFromDto(book));
         log.info("create new book {}", saved);
         return convertToDto(saved);
     }
@@ -84,7 +83,7 @@ public class BookService {
     public void update(int id, BookTo bookTo) {
         assureIdConsistent(bookTo, id);
         log.info("update book {}", id);
-        Book book = repository.getExisted(id);
+        Book book = bookRepository.getExisted(id);
         book.setName(bookTo.getName());
         book.setAuthor(book.getAuthor());
         book.setDescription(book.getDescription());
@@ -101,7 +100,7 @@ public class BookService {
     @Transactional
     public void delete(int id) {
         log.info("delete book {}", id);
-        repository.deleteExisted(id);
+        bookRepository.deleteExisted(id);
     }
 
     /**

@@ -36,8 +36,13 @@ public class BookController {
 
     @Operation(summary = "Return a list of books")
     @GetMapping
-    public ResponseEntity<List<BookTo>> getAll() {
-        List<BookTo> books = bookService.getAll();
+    public ResponseEntity<List<BookTo>> getAll(
+            @RequestParam(required = false) String author,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String genre,
+            @RequestParam(required = false) Integer publicationYear
+    ) {
+        List<BookTo> books = bookService.getAll(author, name, genre, publicationYear);
         return ResponseEntity.ok(books);
     }
 
