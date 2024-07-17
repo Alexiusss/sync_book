@@ -5,6 +5,7 @@ import com.example.sync_book.model.Publisher;
 import com.example.sync_book.repository.BookRepository;
 import com.example.sync_book.repository.PublisherRepository;
 import com.example.sync_book.to.BookTo;
+import com.google.common.base.Strings;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static com.example.sync_book.util.ValidationUtil.assureIdConsistent;
@@ -47,13 +49,22 @@ public class BookService {
     }
 
     /**
-     * Retrieves all books.
+     * Retrieves all books filtered by the specified parameters.
      *
-     * @return a list of BookTo DTOs representing all books
+     * @param author          the author's name
+     * @param name            the book's name
+     * @param genre           the book's genre
+     * @param publicationYear the book's publication year
+     * @return a list of BookTo DTOs representing all books filtered by the specified parameters
      */
     public List<BookTo> getAll(String author, String name, String genre, Integer publicationYear) {
-        log.info("get all books");
-        return bookRepository.findAll(author, name, genre, publicationYear).stream()
+        log.info("Retrieving books with author: {}, name: {}, genre: {}, publicationYear: {}",
+                !Strings.isNullOrEmpty(author) ? author : "All",
+                !Strings.isNullOrEmpty(name) ? name : "All",
+                !Strings.isNullOrEmpty(genre) ? genre : "All",
+                Optional.ofNullable(publicationYear).isPresent() ? publicationYear : "All");
+        return bookRepository.findAll(author, name, genre, publicationYear)
+                .stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }

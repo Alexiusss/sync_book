@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface BookRepository extends BaseRepository<Book>, JpaSpecificationExecutor<Book> {
+public interface BookRepository extends BaseRepository<Book> {
     @EntityGraph(attributePaths = "publisher", type = EntityGraph.EntityGraphType.LOAD)
     @Query(value = "SELECT b FROM Book b " +
             "WHERE lower(b.genre) LIKE concat('%', COALESCE(NULLIF(lower(:genre), ''), '%')) " +
