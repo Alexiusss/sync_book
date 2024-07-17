@@ -9,13 +9,15 @@ import com.google.common.base.Strings;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static com.example.sync_book.util.ValidationUtil.assureIdConsistent;
 import static com.example.sync_book.util.ValidationUtil.checkNew;
@@ -51,22 +53,26 @@ public class BookService {
     /**
      * Retrieves all books filtered by the specified parameters.
      *
+     * @param pageable        the pagination information
      * @param author          the author's name
      * @param name            the book's name
      * @param genre           the book's genre
      * @param publicationYear the book's publication year
      * @return a list of BookTo DTOs representing all books filtered by the specified parameters
      */
-    public List<BookTo> getAll(String author, String name, String genre, Integer publicationYear) {
+    public Page<BookTo> getAll(Pageable pageable, String author, String name, String genre, Integer publicationYear) {
         log.info("Retrieving books with author: {}, name: {}, genre: {}, publicationYear: {}",
                 !Strings.isNullOrEmpty(author) ? author : "All",
                 !Strings.isNullOrEmpty(name) ? name : "All",
                 !Strings.isNullOrEmpty(genre) ? genre : "All",
                 Optional.ofNullable(publicationYear).isPresent() ? publicationYear : "All");
-        return bookRepository.findAll(author, name, genre, publicationYear)
+
+        Page<Book> page = bookRepository.findAll(pageable, author, name, genre, publicationYear);
+        List<BookTo> bookToList = page.getContent()
                 .stream()
                 .map(this::convertToDto)
-                .collect(Collectors.toList());
+                .toList();
+        return new PageImpl<>(bookToList, pageable, bookToList.size());
     }
 
     /**
