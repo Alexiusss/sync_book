@@ -17,6 +17,7 @@ import static com.example.sync_book.util.BookTestData.*;
 import static com.example.sync_book.util.JsonUtil.writeValue;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 class BookControllerTest extends AbstractControllerTest {
@@ -66,7 +67,8 @@ class BookControllerTest extends AbstractControllerTest {
 
     @Test
     void updateInvalid() throws Exception {
-        BookTo bookInvalid = BOOK1;
+        BookTo bookInvalid = getNew();
+        bookInvalid.setId(BOOK1_ID);
         bookInvalid.setName("");
 
         perform(MockMvcRequestBuilders.put(REST_URL + "/" + BOOK1_ID)
@@ -77,7 +79,8 @@ class BookControllerTest extends AbstractControllerTest {
 
     @Test
     void updateHtmlUnsafe() throws Exception {
-        BookTo bookUnsafe = BOOK1;
+        BookTo bookUnsafe = getNew();
+        bookUnsafe.setId(BOOK1_ID);
         bookUnsafe.setName("<script>alert(123)</script>");
 
         perform(MockMvcRequestBuilders.put(REST_URL + "/" + BOOK1_ID)
@@ -125,7 +128,9 @@ class BookControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.get(REST_URL))
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(BOOK_TO_MATCHER.contentJson(BOOK_TO_LIST));
+                .andDo(print())
+                .andExpect(jsonPath("$.content", equalTo(asParsedJson(BOOK_TO_LIST))));
+
     }
 
     @Test
@@ -134,7 +139,7 @@ class BookControllerTest extends AbstractControllerTest {
                 .param("author", AUTHOR_NAME))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(BOOK_TO_MATCHER.contentJson(List.of(BOOK1)));
+                .andExpect(jsonPath("$.content", equalTo(asParsedJson(List.of(BOOK1)))));
     }
 
     @Test
@@ -143,7 +148,7 @@ class BookControllerTest extends AbstractControllerTest {
                 .param("genre", Genre.FANTASY.toString()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(BOOK_TO_MATCHER.contentJson(List.of(BOOK3)));
+                .andExpect(jsonPath("$.content", equalTo(asParsedJson(List.of(BOOK3)))));
     }
 
     @Test
@@ -152,7 +157,7 @@ class BookControllerTest extends AbstractControllerTest {
                 .param("publicationYear", String.valueOf(PUBLICATION_YEAR)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(BOOK_TO_MATCHER.contentJson(List.of(BOOK1)));
+                .andExpect(jsonPath("$.content", equalTo(asParsedJson(List.of(BOOK1)))));
     }
 
     @Test
@@ -161,7 +166,7 @@ class BookControllerTest extends AbstractControllerTest {
                 .param("name", BOOK_NAME))
                 .andExpect(status().isOk())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(BOOK_TO_MATCHER.contentJson(List.of(BOOK1)));
+                .andExpect(jsonPath("$.content", equalTo(asParsedJson(List.of(BOOK1)))));
     }
 
     @Test

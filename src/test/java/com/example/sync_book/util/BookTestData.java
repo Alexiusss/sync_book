@@ -4,10 +4,12 @@ import com.example.sync_book.model.FileType;
 import com.example.sync_book.model.Genre;
 import com.example.sync_book.to.BookTo;
 
+import com.jayway.jsonpath.JsonPath;
 import lombok.experimental.UtilityClass;
 
 import java.util.List;
 
+import static com.example.sync_book.util.JsonUtil.writeValue;
 import static com.example.sync_book.util.PublisherTestData.*;
 
 @UtilityClass
@@ -40,5 +42,10 @@ public class BookTestData {
                 .genre(Genre.GUIDE)
                 .publisherId(PUBLISHER1_ID)
                 .build();
+    }
+
+    public static <T> T asParsedJson(Object obj) {
+        String json = writeValue(obj);
+        return JsonPath.read(json, "$");
     }
 }
