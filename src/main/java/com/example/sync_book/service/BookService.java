@@ -4,8 +4,8 @@ import com.example.sync_book.model.Book;
 import com.example.sync_book.model.Publisher;
 import com.example.sync_book.repository.BookRepository;
 import com.example.sync_book.repository.PublisherRepository;
+import com.example.sync_book.to.BookSearchCriteriaTo;
 import com.example.sync_book.to.BookTo;
-import com.google.common.base.Strings;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.List;
-import java.util.Optional;
 
 import static com.example.sync_book.util.ValidationUtil.assureIdConsistent;
 import static com.example.sync_book.util.ValidationUtil.checkNew;
@@ -54,25 +53,17 @@ public class BookService {
      * Retrieves all books filtered by the specified parameters.
      *
      * @param pageable        the pagination information
-     * @param author          the author's name
-     * @param name            the book's name
-     * @param genre           the book's genre
-     * @param publicationYear the book's publication year
+     * @param criteria        the search criteria
      * @return a list of BookTo DTOs representing all books filtered by the specified parameters
      */
-    public Page<BookTo> getAll(Pageable pageable, String author, String name, String genre, Integer publicationYear) {
-        log.info("Retrieving books with author: {}, name: {}, genre: {}, publicationYear: {}",
-                !Strings.isNullOrEmpty(author) ? author : "All",
-                !Strings.isNullOrEmpty(name) ? name : "All",
-                !Strings.isNullOrEmpty(genre) ? genre : "All",
-                Optional.ofNullable(publicationYear).isPresent() ? publicationYear : "All");
-
-        Page<Book> page = bookRepository.findAll(pageable, author, name, genre, publicationYear);
+    public Page<BookTo> getAll(Pageable pageable, BookSearchCriteriaTo criteria) {
+        log.info("Retrieving books with params: {}", criteria.toString());
+        Page<Book> page = bookRepository.findAll(pageable, criteria);
         List<BookTo> bookToList = page.getContent()
                 .stream()
                 .map(this::convertToDto)
                 .toList();
-        return new PageImpl<>(bookToList, pageable, bookToList.size());
+        return new PageImpl<>(bookToList, pageable, page.getTotalElements());
     }
 
     /**

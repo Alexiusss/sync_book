@@ -1,13 +1,16 @@
 package com.example.sync_book.web;
 
 import com.example.sync_book.service.BookService;
+import com.example.sync_book.to.BookSearchCriteriaTo;
 import com.example.sync_book.to.BookTo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,14 +42,9 @@ public class BookController {
     @Operation(summary = "Return a list of books")
     @GetMapping
     public ResponseEntity<Page<BookTo>> getAll(
-            @RequestParam(required = false, defaultValue = "0") Integer page,
-            @RequestParam(required = false, defaultValue = "20") Integer size,
-            @RequestParam(required = false) @Parameter(description = "Author's name") String author,
-            @RequestParam(required = false) @Parameter(description = "Book's name") String name,
-            @RequestParam(required = false) @Parameter(description = "Book's genre") String genre,
-            @RequestParam(required = false) @Parameter(description = "Publication year") Integer publicationYear
-    ) {
-        Page<BookTo> books = bookService.getAll(PageRequest.of(page, size), author, name, genre, publicationYear);
+            @PageableDefault(size = 20, sort = "name", direction = Sort.Direction.ASC) Pageable pageable,
+            @ModelAttribute @Parameter(description = "Criteria for searching books") BookSearchCriteriaTo criteria) {
+        Page<BookTo> books = bookService.getAll(pageable, criteria);
         return ResponseEntity.ok(books);
     }
 
