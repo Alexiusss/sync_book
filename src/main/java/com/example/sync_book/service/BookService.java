@@ -4,6 +4,7 @@ import com.example.sync_book.model.Book;
 import com.example.sync_book.model.Publisher;
 import com.example.sync_book.repository.BookRepository;
 import com.example.sync_book.repository.PublisherRepository;
+import com.example.sync_book.repository.specification.BookSpecification;
 import com.example.sync_book.to.BookSearchCriteriaTo;
 import com.example.sync_book.to.BookTo;
 import lombok.AllArgsConstructor;
@@ -58,7 +59,8 @@ public class BookService {
      */
     public Page<BookTo> getAll(Pageable pageable, BookSearchCriteriaTo criteria) {
         log.info("Retrieving books with params: {}", criteria.toString());
-        Page<Book> page = bookRepository.findAll(pageable, criteria);
+        BookSpecification specification = new BookSpecification(criteria);
+        Page<Book> page = bookRepository.findAll(specification, pageable);
         List<BookTo> bookToList = page.getContent()
                 .stream()
                 .map(this::convertToDto)
