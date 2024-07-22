@@ -9,3 +9,10 @@ INSERT INTO books (id, created_at, modified_at, version, name, author, descripti
 VALUES (100004, now(), null, 0, 'Book 1', 'Book 1 author', 'Book 1 description', 2021, 'http://book1source.com/book1.fb2', 'http://book1image.com', 'book1', 'fb2', 'TEXT', 'ru', null, null, 'DETECTIVE', 100001),
        (100005, now(), null, 0, 'Book 2', 'Book 2 author', 'Book 2 description', 2022, 'http://book2source.com/book2.mp2', 'http://book2image.com', 'book2', 'mp3', 'AUDIO', 'en', null, null, 'HISTORY', 100002),
        (100006, now(), null, 0, 'Book 3', 'Book 3 author', 'Book 3 description', 2023, 'http://book3source.com/book3.epub', 'http://book3image.com', 'book3', 'epub','TEXT', 'ru', null, null, 'FANTASY', 100003);
+
+INSERT INTO bookmarks (id, created_at, modified_at, version, user_id, book_id, last_position)
+VALUES ('1000101', now(), null, 0, 'User_1_id', 100004, 11.11),
+       ('1000102', now(), null, 0, 'User_2_id', 100005, 22.22),
+       ('1000103', now(), null, 0, 'User_3_id', 100006, 44.44),
+       ('1000104', now(), null, 0, 'User_1_id', 100005, 55.55),
+       ('1000105', now(), null, 0, 'User_1_id', 100006, 66.66);
