@@ -14,10 +14,10 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import java.util.List;
 
 import static com.example.sync_book.util.BookTestData.*;
+import static com.example.sync_book.util.CommonTestData.*;
 import static com.example.sync_book.util.JsonUtil.writeValue;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 class BookControllerTest extends AbstractControllerTest {

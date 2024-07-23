@@ -12,6 +12,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static com.example.sync_book.util.BookTestData.BOOK1_ID;
 import static com.example.sync_book.util.BookmarkTestData.*;
+import static com.example.sync_book.util.CommonTestData.*;
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 

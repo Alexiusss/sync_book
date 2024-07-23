@@ -9,8 +9,6 @@ import java.util.List;
 public class PublisherTestData {
 
     public static final MatcherFactory.Matcher<PublisherTo> PUBLISHER_TO_MATCHER = MatcherFactory.usingIterableAssertions(PublisherTo.class, "id");
-    public static final int NOT_FOUND_ID = 1000;
-    public static final String NOT_FOUND_MESSAGE = "Entity with id=" + NOT_FOUND_ID + " not found";
     public static final Integer PUBLISHER1_ID = 100001;
     public static final Integer PUBLISHER2_ID = 100002;
     public static final Integer PUBLISHER3_ID = 100003;

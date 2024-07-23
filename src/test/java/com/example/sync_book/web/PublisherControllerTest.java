@@ -10,6 +10,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static com.example.sync_book.util.CommonTestData.NOT_FOUND_ID;
+import static com.example.sync_book.util.CommonTestData.NOT_FOUND_MESSAGE;
 import static com.example.sync_book.util.JsonUtil.writeValue;
 import static com.example.sync_book.util.PublisherTestData.*;
 import static org.hamcrest.Matchers.equalTo;

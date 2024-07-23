@@ -3,7 +3,10 @@ package com.example.sync_book.util;
 import com.example.sync_book.to.BookmarkTo;
 import lombok.experimental.UtilityClass;
 
-import static com.example.sync_book.util.BookTestData.BOOK1_ID;
+import java.util.List;
+
+import static com.example.sync_book.util.BookTestData.*;
+import static com.example.sync_book.util.CommonTestData.USER1_ID;
 
 @UtilityClass
 public class BookmarkTestData {
