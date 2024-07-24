@@ -14,6 +14,7 @@ import org.springframework.http.ProblemDetail;
 import org.springframework.lang.NonNull;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.ServletRequestBindingException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -51,6 +52,7 @@ public class GlobalExceptionHandler {
             put(ValidationException.class, BAD_REQUEST);
             put(HttpRequestMethodNotSupportedException.class, BAD_REQUEST);
             put(ServletRequestBindingException.class, BAD_REQUEST);
+            put(MethodArgumentNotValidException.class, BAD_DATA);
         }
     };
 
