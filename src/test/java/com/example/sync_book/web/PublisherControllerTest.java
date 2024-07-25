@@ -10,8 +10,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import static com.example.sync_book.util.CommonTestData.NOT_FOUND_ID;
-import static com.example.sync_book.util.CommonTestData.NOT_FOUND_MESSAGE;
+import java.util.List;
+
+import static com.example.sync_book.util.BookTestData.BOOK1;
+import static com.example.sync_book.util.CommonTestData.*;
 import static com.example.sync_book.util.JsonUtil.writeValue;
 import static com.example.sync_book.util.PublisherTestData.*;
 import static org.hamcrest.Matchers.equalTo;
@@ -126,6 +128,14 @@ class PublisherControllerTest extends AbstractControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(PUBLISHER_TO_MATCHER.contentJson(PUBLISHER_TO_LIST));
+    }
+
+    @Test
+    void getAllByPublisherId() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + "/" + PUBLISHER1_ID + "/books"))
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content", equalTo(asParsedJson(List.of(BOOK1)))));
     }
 
     @Test

@@ -53,19 +53,15 @@ public class BookService {
     /**
      * Retrieves all books filtered by the specified parameters.
      *
-     * @param pageable        the pagination information
-     * @param criteria        the search criteria
+     * @param pageable the pagination information
+     * @param criteria the search criteria
      * @return a list of BookTo DTOs representing all books filtered by the specified parameters
      */
     public Page<BookTo> getAll(Pageable pageable, BookSearchCriteriaTo criteria) {
         log.info("Retrieving books with params: {}", criteria.toString());
         BookSpecification specification = new BookSpecification(criteria);
         Page<Book> page = bookRepository.findAll(specification, pageable);
-        List<BookTo> bookToList = page.getContent()
-                .stream()
-                .map(this::convertToDto)
-                .toList();
-        return new PageImpl<>(bookToList, pageable, page.getTotalElements());
+        return convertPageContentToDto(page.getContent(), pageable, page.getTotalElements());
     }
 
     /**
@@ -166,5 +162,26 @@ public class BookService {
     private String getFileName(String source) {
         String[] strings = source.split("/");
         return strings[strings.length - 1];
+    }
+
+    /**
+     * Retrieves all books by publisher id.
+     *
+     * @param pageable the pagination information
+     * @param id the publisher ID for which books need to be retrieved
+     * @return a list of BookTo DTOs representing all books filtered by the id param
+     */
+    public Page<BookTo> getAllByPublisherId(Pageable pageable, int id) {
+        log.info("Retrieving books for publisher: {}", id);
+        Page<Book> page = bookRepository.findAllByPublisherId(pageable, id);
+        return convertPageContentToDto(page.getContent(), pageable, page.getTotalElements());
+    }
+
+    private Page<BookTo> convertPageContentToDto(List<Book> books, Pageable pageable, long size) {
+        List<BookTo> bookToList = books
+                .stream()
+                .map(this::convertToDto)
+                .toList();
+        return new PageImpl<>(bookToList, pageable, size);
     }
 }

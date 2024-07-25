@@ -1,10 +1,16 @@
 package com.example.sync_book.web;
 
+import com.example.sync_book.service.BookService;
 import com.example.sync_book.service.PublisherService;
+import com.example.sync_book.to.BookTo;
 import com.example.sync_book.to.PublisherTo;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +31,7 @@ public class PublisherController {
     public static final String REST_URL = "/api/v1/publishers";
 
     private final PublisherService publisherService;
+    private final BookService bookServiceService;
 
     @Operation(summary = "Get a publisher by its id")
     @GetMapping("/{id}")
@@ -62,5 +69,14 @@ public class PublisherController {
     public ResponseEntity<?> delete(@PathVariable int id) {
         publisherService.delete(id);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @Operation(summary = "Return a list of books by publisher id")
+    @GetMapping("/{id}/books")
+    public ResponseEntity<Page<BookTo>> getAllBooks(
+            @PageableDefault(size = 20, sort = "name", direction = Sort.Direction.ASC) Pageable pageable,
+            @PathVariable int id) {
+        Page<BookTo> books = bookServiceService.getAllByPublisherId(pageable, id);
+        return ResponseEntity.ok(books);
     }
 }

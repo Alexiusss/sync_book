@@ -24,4 +24,7 @@ public interface BookRepository extends BaseRepository<Book>, JpaSpecificationEx
     @Override
     @EntityGraph(attributePaths = "publisher", type = EntityGraph.EntityGraphType.LOAD)
     Page<Book> findAll(Specification<Book> specification, Pageable pageable);
+
+    @EntityGraph(attributePaths = "publisher", type = EntityGraph.EntityGraphType.LOAD)
+    Page<Book> findAllByPublisherId(Pageable pageable, int publisherId);
 }
