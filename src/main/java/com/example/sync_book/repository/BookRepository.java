@@ -2,6 +2,7 @@ package com.example.sync_book.repository;
 
 import com.example.sync_book.model.Book;
 import com.example.sync_book.to.BookSearchCriteriaTo;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -23,7 +24,8 @@ public interface BookRepository extends BaseRepository<Book>, JpaSpecificationEx
 
     @Override
     @EntityGraph(attributePaths = "publisher", type = EntityGraph.EntityGraphType.LOAD)
-    Page<Book> findAll(Specification<Book> specification, Pageable pageable);
+    @NotNull
+    Page<Book> findAll(@NotNull Specification<Book> specification, @NotNull Pageable pageable);
 
     @EntityGraph(attributePaths = "publisher", type = EntityGraph.EntityGraphType.LOAD)
     Page<Book> findAllByPublisherId(Pageable pageable, int publisherId);

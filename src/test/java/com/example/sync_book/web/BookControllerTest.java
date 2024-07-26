@@ -169,6 +169,32 @@ class BookControllerTest extends AbstractControllerTest {
     }
 
     @Test
+    void gertAllByLanguage() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL)
+                .param("language", BOOK_LANGUAGE))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.content", equalTo(asParsedJson(List.of(BOOK1, BOOK2)))));
+    }
+    @Test
+    void gertAllByTranslator() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL)
+                .param("translator", BOOK_TRANSLATOR))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.content", equalTo(asParsedJson(List.of(BOOK1)))));
+    }
+
+    @Test
+    void gertAllByNarrator() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL)
+                .param("narrator", BOOK_NARRATOR))
+                .andExpect(status().isOk())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.content", equalTo(asParsedJson(List.of(BOOK1)))));
+    }
+
+    @Test
     void get() throws Exception {
         perform(MockMvcRequestBuilders.get(REST_URL + "/" + BOOK1_ID))
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))

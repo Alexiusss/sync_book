@@ -24,6 +24,9 @@ public class BookSpecification implements Specification<Book> {
         addPredicateIfValueLike(predicates, root, builder, "genre", criteria.genre());
         addPredicateIfValueLike(predicates, root, builder, "name", criteria.name());
         addPredicateIfValueLike(predicates, root, builder, "author", criteria.author());
+        addPredicateIfValueEquals(predicates, root, builder, "language", criteria.language());
+        addPredicateIfValueEquals(predicates, root, builder, "narrator", criteria.narrator());
+        addPredicateIfValueEquals(predicates, root, builder, "translator", criteria.translator());
         addNumberPredicate(predicates, root, builder, "publicationYear", criteria.publicationYear());
         return builder.and(predicates.toArray(new Predicate[0]));
     }
@@ -37,6 +40,12 @@ public class BookSpecification implements Specification<Book> {
     private void addNumberPredicate(List<Predicate> predicates, Root<Book> root, CriteriaBuilder builder, String attribute, Integer number) {
         if (number != null && number != -1) {
             predicates.add(builder.equal(root.get(attribute), number));
+        }
+    }
+
+    private void addPredicateIfValueEquals(List<Predicate> predicates, Root<Book> root, CriteriaBuilder builder, String attribute, String value) {
+        if (value != null && !value.isEmpty()) {
+            predicates.add(builder.equal(builder.lower(root.get(attribute)), value.toLowerCase()));
         }
     }
 }

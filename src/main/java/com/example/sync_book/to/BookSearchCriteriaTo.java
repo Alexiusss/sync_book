@@ -17,15 +17,25 @@ public record BookSearchCriteriaTo(
         String genre,
 
         @Schema(description = "Publication year")
-        Integer publicationYear
+        Integer publicationYear,
 
+        @Schema(description = "Book language")
+        String language,
 
+        @Schema(description = "Book narrator")
+        String narrator,
+
+        @Schema(description = "Book translator")
+        String translator
 ) {
     @Override
     public String toString() {
         return "author='" + (!Strings.isNullOrEmpty(author) ? author : "All") + '\'' +
                 ", name='" + (!Strings.isNullOrEmpty(name) ? name : "All") + '\'' +
                 ", genre='" + (!Strings.isNullOrEmpty(genre) ? genre : "All") + '\'' +
+                ", language='" + (!Strings.isNullOrEmpty(language) ? language : "All") + '\'' +
+                ", narrator='" + (!Strings.isNullOrEmpty(narrator) ? narrator : "All") + '\'' +
+                ", translator='" + (!Strings.isNullOrEmpty(translator) ? translator : "All") + '\'' +
                 ", publicationYear=" + (Optional.ofNullable(publicationYear).isPresent() ? publicationYear : "All");
     }
 }
