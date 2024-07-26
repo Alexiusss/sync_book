@@ -12,6 +12,10 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.core.NestedExceptionUtils;
 import org.springframework.http.ProblemDetail;
 import org.springframework.lang.NonNull;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.ErrorResponse;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -55,6 +59,30 @@ public class GlobalExceptionHandler {
             put(MethodArgumentNotValidException.class, BAD_DATA);
         }
     };
+
+    @ExceptionHandler(BindException.class)
+    ProblemDetail bindException(BindException ex, HttpServletRequest request) {
+        Map<String, String> invalidParams = getErrorMap(ex.getBindingResult());
+        String path = request.getRequestURI();
+        log.warn(ERR_PFX + "BindException with invalidParams {} at request {}", invalidParams, path);
+        return createProblemDetail(ex, path, BAD_REQUEST, "BindException", Map.of("invalid_params", invalidParams));
+    }
+
+    private Map<String, String> getErrorMap(BindingResult result) {
+        Map<String, String> invalidParams = new LinkedHashMap<>();
+        for (ObjectError error : result.getGlobalErrors()) {
+            invalidParams.put(error.getObjectName(), getErrorMessage(error));
+        }
+        for (FieldError error : result.getFieldErrors()) {
+            invalidParams.put(error.getField(), getErrorMessage(error));
+        }
+        return invalidParams;
+    }
+
+    private String getErrorMessage(ObjectError error) {
+        return error.getCode() == null ? error.getDefaultMessage() :
+                messageSource.getMessage(error.getCode(), error.getArguments(), error.getDefaultMessage(), LocaleContextHolder.getLocale());
+    }
 
     @ExceptionHandler(Exception.class)
     private ProblemDetail exception(Exception ex, HttpServletRequest request) {
