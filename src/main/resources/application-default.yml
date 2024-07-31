@@ -26,6 +26,11 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  servlet:
+    multipart:
+      max-file-size: 150MB
+      max-request-size: 150MB
+
 logging:
   level:
     root: WARN
@@ -37,6 +42,8 @@ minio.root.user: ${MINIO_ROOT_USER}
 minio.root.password: ${MINIO_ROOT_PASSWORD}
 minio.endpoint: ${MINIO_ENDPOINT}
 minio.bucket.name: ${MINIO_BUCKET_NAME}
+
+default.audio.chunk.size: 4194304
 
 application.version: 1.0.0
 application.description: SyncBook is a microservice designed to store and synchronize audio and text files
