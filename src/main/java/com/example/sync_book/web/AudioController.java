@@ -1,10 +1,10 @@
 package com.example.sync_book.web;
 
 import com.example.sync_book.service.MinioService;
-import com.example.sync_book.service.SyncService;
 import io.minio.errors.*;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 
+import static com.example.sync_book.util.AudioUtil.*;
 import static org.springframework.http.HttpHeaders.*;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
@@ -22,32 +23,30 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 public class AudioController {
 
     public static final String REST_URL = "/api/v1/sync";
-    private static final String AUDIO_MPEG = "audio/mpeg";
 
     private final MinioService minioService;
-    private final SyncService syncService;
 
     @GetMapping("/{fileName}")
     @Operation(summary = "Download part of the file by its name")
     public ResponseEntity<byte[]> readChunk(
             @PathVariable String fileName,
-            @RequestParam(required = false, defaultValue = "0.00f") float lastPosition
+            @RequestHeader(value = HttpHeaders.RANGE, defaultValue = "bytes=0-") String range
     )
             throws ServerException, InsufficientDataException, ErrorResponseException,
             IOException, NoSuchAlgorithmException, InvalidKeyException,
             InvalidResponseException, XmlParserException, InternalException
     {
         long fileSize = minioService.getFileSize(fileName);
-        long startRange = syncService.calculateStartRange(fileSize, lastPosition);
-        long endRange = syncService.calculateEndRange(fileSize, startRange);
-
+        long startRange = parseStartRange(range);
+        long endRange = parseEndRange(range, fileSize);
         byte[] content = minioService.get(fileName, startRange, endRange);
+
         return ResponseEntity
                 .status(HttpStatus.PARTIAL_CONTENT)
                 .header(CONTENT_TYPE, AUDIO_MPEG)
-                .header(ACCEPT_RANGES, "bytes")
-                .header(CONTENT_LENGTH, String.valueOf(endRange - startRange))
-                .header(CONTENT_RANGE, "bytes " + startRange + "-" + endRange + "/" + fileSize)
+                .header(ACCEPT_RANGES, ACCEPTS_RANGES_VALUE)
+                .header(CONTENT_LENGTH, calculateContentLength(startRange, endRange))
+                .header(CONTENT_RANGE, getContentRangeValue(startRange, endRange, fileSize))
                 .body(content);
     }
 }
