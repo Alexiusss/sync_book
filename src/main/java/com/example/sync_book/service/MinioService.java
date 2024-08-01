@@ -115,12 +115,20 @@ public class MinioService {
         }
     }
 
-    public long getFileSize(String fileName) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
+    /**
+     * Retrieves the size of a file stored on the MinIO server.
+     *
+     * @param fileName the name of the file whose size is to be retrieved.
+     * @return the size of the file in bytes.
+     */
+    public long getFileSize(String fileName)
+            throws ServerException, InsufficientDataException, ErrorResponseException,
+            IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException,
+            XmlParserException, InternalException {
         return minioClient.statObject(StatObjectArgs.builder()
                         .bucket(bucketName)
                         .object(fileName)
                         .build())
                 .size();
     }
-
 }

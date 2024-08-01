@@ -31,12 +31,6 @@ public class MinioController {
 
     private final MinioService minioService;
 
-    /**
-     * Uploads a file to MinIO storage.
-     *
-     * @param file the file to upload.
-     * @return the name of the uploaded file.
-     */
     @Operation(summary = "Upload the file")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> upload(@Parameter(description = "File to upload") @RequestParam("file")
@@ -51,12 +45,6 @@ public class MinioController {
         return ResponseEntity.created(uriOfNewResource).body(file.getOriginalFilename());
     }
 
-    /**
-     * Downloads a file from MinIO storage.
-     *
-     * @param fileName the name of the file to download.
-     * @return the byte content of the file.
-     */
     @GetMapping("/{fileName}")
     @Operation(summary = "Download the file by its name")
     public ResponseEntity<byte[]> download(@PathVariable String fileName)
@@ -67,5 +55,15 @@ public class MinioController {
         return ResponseEntity.ok()
                 .header("Content-Disposition", "attachment; filename=\"" + fileName + "\"")
                 .body(content);
+    }
+
+    @GetMapping("/{fileName}/size")
+    @Operation(summary = "Retrieves the size of a file by its name")
+    public ResponseEntity<Long> getFileSize(@PathVariable String fileName)
+            throws ServerException, InsufficientDataException, ErrorResponseException,
+            IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException,
+            XmlParserException, InternalException {
+        long fileSize = minioService.getFileSize(fileName);
+        return ResponseEntity.ok(fileSize);
     }
 }

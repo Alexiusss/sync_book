@@ -14,6 +14,7 @@ public class MinioTestData {
     public static final String MINIO_USERNAME = "admin";
     public static final String MINIO_PASSWORD = "password";
     public static final int MINIO_PORT = 9000;
+    public static final String FILE_NAME = "test.txt";
     public static final String NOT_FOUND_MESSAGE = "The specified key does not exist.";
 
     public static MinIOContainer initMinioContainer() {
