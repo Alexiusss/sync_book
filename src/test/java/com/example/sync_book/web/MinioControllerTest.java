@@ -7,6 +7,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static com.example.sync_book.util.MinioTestData.*;
 import static org.hamcrest.Matchers.equalTo;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 
@@ -21,7 +22,7 @@ public class MinioControllerTest extends AbstractControllerTest {
                 .file(file))
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())
-                .andExpect(content().bytes(file.getOriginalFilename().getBytes()));
+                .andExpect(content().string("http://localhost" + REST_URL + "/" + file.getOriginalFilename()));
     }
 
     @Test
@@ -37,7 +38,6 @@ public class MinioControllerTest extends AbstractControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_PROBLEM_JSON))
                 .andExpect(status().is5xxServerError())
                 .andExpect(jsonPath("detail", equalTo(NOT_FOUND_MESSAGE)));
-
     }
 
     @Test
@@ -46,5 +46,12 @@ public class MinioControllerTest extends AbstractControllerTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().json("0"));
+    }
+
+    @Test
+    void delete() throws Exception {
+        perform(MockMvcRequestBuilders.delete(REST_URL + "/" + FILE_NAME))
+                .andExpect(status().isNoContent())
+                .andDo(print());
     }
 }

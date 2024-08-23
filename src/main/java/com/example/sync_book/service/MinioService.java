@@ -1,9 +1,6 @@
 package com.example.sync_book.service;
 
-import io.minio.GetObjectArgs;
-import io.minio.MinioClient;
-import io.minio.PutObjectArgs;
-import io.minio.StatObjectArgs;
+import io.minio.*;
 import io.minio.errors.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -130,5 +127,30 @@ public class MinioService {
                         .object(fileName)
                         .build())
                 .size();
+    }
+
+    /**
+     * Delete a file from the MinIO server.
+     *
+     * @param fileName the name of the file to be deleted.
+     * @throws ServerException           thrown to indicate that S3 service returning HTTP server error
+     * @throws ErrorResponseException    thrown to indicate S3 service returned an error response.
+     * @throws InsufficientDataException thrown to indicate not enough data available in InputStream.
+     * @throws InternalException         thrown to indicate internal library error.
+     * @throws InvalidKeyException       thrown to indicate missing of HMAC SHA-256 library.
+     * @throws InvalidResponseException  thrown to indicate S3 service returned invalid or no error
+     *                                   response.
+     * @throws IOException               thrown to indicate I/O error on S3 operation.
+     * @throws NoSuchAlgorithmException  thrown to indicate missing of MD5 or SHA-256 digest library.
+     * @throws XmlParserException        thrown to indicate XML parsing error.
+     */
+    public void deleteFile(String fileName)
+            throws ServerException, InsufficientDataException, ErrorResponseException,
+            IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException,
+            XmlParserException, InternalException {
+        minioClient.removeObject(RemoveObjectArgs.builder()
+                .bucket(bucketName)
+                .object(fileName)
+                .build());
     }
 }

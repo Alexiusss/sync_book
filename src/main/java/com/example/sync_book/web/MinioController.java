@@ -34,7 +34,7 @@ public class MinioController {
     @Operation(summary = "Upload the file")
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<String> upload(@Parameter(description = "File to upload") @RequestParam("file")
-                                    @Schema(type = "string", format = "binary") MultipartFile file)
+                                         @Schema(type = "string", format = "binary") MultipartFile file)
             throws ServerException, InsufficientDataException, ErrorResponseException,
             IOException, NoSuchAlgorithmException, InvalidKeyException,
             InvalidResponseException, XmlParserException, InternalException {
@@ -42,7 +42,7 @@ public class MinioController {
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path(REST_URL + "/{fileName}")
                 .buildAndExpand(file.getOriginalFilename()).toUri();
-        return ResponseEntity.created(uriOfNewResource).body(file.getOriginalFilename());
+        return ResponseEntity.created(uriOfNewResource).body(uriOfNewResource.toString());
     }
 
     @GetMapping("/{fileName}")
@@ -65,5 +65,15 @@ public class MinioController {
             XmlParserException, InternalException {
         long fileSize = minioService.getFileSize(fileName);
         return ResponseEntity.ok(fileSize);
+    }
+
+    @DeleteMapping("/{filename}")
+    @Operation(summary = "Delete the file by its name")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable String filename)
+            throws ServerException, InsufficientDataException, ErrorResponseException,
+            IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException,
+            XmlParserException, InternalException {
+        minioService.deleteFile(filename);
     }
 }
