@@ -91,11 +91,11 @@ public class BookService {
         log.info("update book {}", id);
         Book book = bookRepository.getExisted(id);
         book.setName(bookTo.getName());
-        book.setAuthor(book.getAuthor());
-        book.setDescription(book.getDescription());
-        book.setPublicationYear(book.getPublicationYear());
-        book.setSourceUrl(book.getSourceUrl());
-        book.setImageUrl(book.getImageUrl());
+        book.setAuthor(bookTo.getAuthor());
+        book.setDescription(bookTo.getDescription());
+        book.setPublicationYear(bookTo.getPublicationYear());
+        book.setSourceUrl(bookTo.getSourceUrl());
+        book.setImageUrl(bookTo.getImageUrl());
     }
 
     /**
