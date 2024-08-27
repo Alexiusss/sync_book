@@ -39,6 +39,16 @@ public class BookController {
         return ResponseEntity.ok(book);
     }
 
+    @Operation(summary = "Get a book by its name and file type")
+    @GetMapping("/search")
+    public ResponseEntity<BookTo> getByName(
+            @RequestParam(name = "name") String name,
+            @RequestParam(name = "fileType") String fileType
+    ) {
+        BookTo book = bookService.getByNameAndFileType(name, fileType);
+        return ResponseEntity.ok(book);
+    }
+
     @Operation(summary = "Return a list of books")
     @GetMapping
     public ResponseEntity<Page<BookTo>> getAll(

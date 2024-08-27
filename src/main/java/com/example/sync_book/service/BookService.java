@@ -1,6 +1,7 @@
 package com.example.sync_book.service;
 
 import com.example.sync_book.model.Book;
+import com.example.sync_book.model.FileType;
 import com.example.sync_book.model.Publisher;
 import com.example.sync_book.repository.BookRepository;
 import com.example.sync_book.repository.PublisherRepository;
@@ -47,6 +48,19 @@ public class BookService {
     public BookTo get(int id) {
         log.info("get book {}", id);
         Book book = bookRepository.getExisted(id);
+        return convertToDto(book);
+    }
+
+    /**
+     * Retrieves a book by its name.
+     *
+     * @param name the name of the book to retrieve
+     * @param fileType the file type of the book to retrieve
+     * @return the BookTo DTO of the retrieved book
+     */
+    public BookTo getByNameAndFileType(String name, String fileType) {
+        log.info("get book with name {} and file type {}", name, fileType);
+        Book book = bookRepository.findByNameAndFileType(name, FileType.valueOf(fileType));
         return convertToDto(book);
     }
 

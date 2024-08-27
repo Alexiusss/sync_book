@@ -201,4 +201,14 @@ class BookControllerTest extends AbstractControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(BOOK_TO_MATCHER.contentJson(BOOK1));
     }
+
+    @Test
+    void getByName() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + "/search")
+                .param("name", BOOK_NAME)
+                .param("fileType", "TEXT"))
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(BOOK_TO_MATCHER.contentJson(BOOK1));
+    }
 }

@@ -1,7 +1,9 @@
 package com.example.sync_book.repository;
 
 import com.example.sync_book.model.Book;
+import com.example.sync_book.model.FileType;
 import com.example.sync_book.to.BookSearchCriteriaTo;
+import jakarta.validation.constraints.NotBlank;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -14,6 +16,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BookRepository extends BaseRepository<Book>, JpaSpecificationExecutor<Book> {
+
+    @EntityGraph(attributePaths = "publisher", type = EntityGraph.EntityGraphType.LOAD)
+    Book findByNameAndFileType(@NotBlank String name, @NotNull FileType fileType);
+
     @EntityGraph(attributePaths = "publisher", type = EntityGraph.EntityGraphType.LOAD)
     @Query(value = "SELECT b FROM Book b " +
             "WHERE lower(b.genre) LIKE concat('%', COALESCE(NULLIF(lower(:#{#criteria.genre}), ''), '%')) " +
