@@ -16,6 +16,7 @@ import java.util.List;
 import static com.example.sync_book.util.BookTestData.*;
 import static com.example.sync_book.util.CommonTestData.*;
 import static com.example.sync_book.util.JsonUtil.writeValue;
+import static org.hamcrest.Matchers.contains;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -107,6 +108,15 @@ class BookControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.get(REST_URL + "/" + NOT_FOUND_ID))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("detail", equalTo(NOT_FOUND_MESSAGE)));
+    }
+
+    @Test
+    void getNotFoundByName() throws Exception {
+        perform(MockMvcRequestBuilders.get(REST_URL + "/search" )
+                .param("name", "Not found")
+                .param("fileType", "TEXT"))
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("title", equalTo("Resource not found")));
     }
 
     @Test
