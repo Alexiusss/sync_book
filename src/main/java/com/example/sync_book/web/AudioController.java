@@ -3,6 +3,8 @@ package com.example.sync_book.web;
 import com.example.sync_book.service.MinioService;
 import io.minio.errors.*;
 import io.swagger.v3.oas.annotations.Operation;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -30,7 +32,8 @@ public class AudioController {
     @Operation(summary = "Download part of the file by its name")
     public ResponseEntity<byte[]> readChunk(
             @PathVariable String fileName,
-            @RequestHeader(value = HttpHeaders.RANGE, defaultValue = "bytes=0-") String range
+            @RequestHeader(value = HttpHeaders.RANGE, defaultValue = "bytes=0-")
+            @Valid @Pattern(regexp = "^bytes=\\d{1,7}-\\d{0,7}$", message = "Invalid Range header format. Expected format: 'bytes=<start>-<end>'. Example: 'bytes=0-1000'.") String range
     )
             throws ServerException, InsufficientDataException, ErrorResponseException,
             IOException, NoSuchAlgorithmException, InvalidKeyException,

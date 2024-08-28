@@ -60,7 +60,7 @@ public class BookService {
      */
     public BookTo getByNameAndFileType(String name, String fileType) {
         log.info("get book with name {} and file type {}", name, fileType);
-        Book book = bookRepository.findByNameAndFileType(name, FileType.valueOf(fileType));
+        Book book = bookRepository.getExistedNByName(name, FileType.valueOf(fileType));
         return convertToDto(book);
     }
 

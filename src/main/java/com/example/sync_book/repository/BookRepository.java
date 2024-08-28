@@ -1,5 +1,6 @@
 package com.example.sync_book.repository;
 
+import com.example.sync_book.error.NotFoundException;
 import com.example.sync_book.model.Book;
 import com.example.sync_book.model.FileType;
 import com.example.sync_book.to.BookSearchCriteriaTo;
@@ -14,11 +15,17 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface BookRepository extends BaseRepository<Book>, JpaSpecificationExecutor<Book> {
 
     @EntityGraph(attributePaths = "publisher", type = EntityGraph.EntityGraphType.LOAD)
-    Book findByNameAndFileType(@NotBlank String name, @NotNull FileType fileType);
+    Optional<Book> findByNameAndFileType(@NotBlank String name, @NotNull FileType fileType);
+
+    default Book getExistedNByName(String name, FileType fileType) {
+        return findByNameAndFileType(name, fileType).orElseThrow(() -> new NotFoundException("Entity with name=" + name + " and file type=" + fileType + "not found"));
+    }
 
     @EntityGraph(attributePaths = "publisher", type = EntityGraph.EntityGraphType.LOAD)
     @Query(value = "SELECT b FROM Book b " +
